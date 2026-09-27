@@ -16,7 +16,7 @@
             </div>
             <div>
                 <ul>
-                    <li><a href="about.html">About</a></li>
+                    <li><a href="#aboutMe">About</a></li>
                     <li><a href="projects.html">Projects</a></li>
                 </ul>
             </div>
@@ -28,25 +28,152 @@
 
     <main>
         <section>
-            <img src="https://images.unsplash.com/photo-1540198163009-7afda7da2945?w=500&auto=format&fit=crop"
-                alt="Image">
+            <img src="https://images.unsplash.com/photo-1540198163009-7afda7da2945?w=700&h=200" alt="Image">
             <div>
-                <p>Cybersecurity Enthusiast</p>
-                <p>Studying • Living • Sleeping</p>
+                <h1>Cybersecurity Student</h1>
+
+                <p>Learning • Building • Exploring</p>
+
                 <div id="keyword-animation">
-                    <p>Top useful keyword 1</p>
-                    <p>Top useful keyword 2</p>
-                    <p>Top useful keyword 3</p>
+                    <p>Cybersecurity</p>
+                    <p>Networking</p>
+                    <p>Web Development</p>
                 </div>
-                <p>No Bluff, studying and enjoying the beauty of scenaries.</p>
-                <p>Let's Work Together</p>
+
+                <p>
+                    A first-year cybersecurity student learning how technology,
+                    networks, and the web work while building my skills one project at a time.
+                </p>
+
+                <a href="#about">Learn More About Me</a>
+            </div>
+        </section>
+        <section id="about">
+            <div>
+
+                <div id="education">
+                    <h1>About Me</h1>
+                    <h2>Educational Background</h2>
+                    <p>B.Sc. Cybersecurity — 100 Level | 2026–Present</p>
+                    <p>
+                        I am currently building a foundation in cybersecurity,
+                        networking, programming, and web technologies.
+                    </p>
+                </div>
+
+                <div id="aspirations">
+                    <h2>Career Aspirations</h2>
+
+                    <p>
+                        My goal is to develop a strong foundation in cybersecurity,
+                        networking, and programming. I am also learning web development
+                        to better understand how websites and web applications are built.
+                        As I progress in my studies, I hope to explore different areas of
+                        cybersecurity and discover where my interests fit best.
+                    </p>
+                </div>
+
+                <div id="skills">
+                    <h2>Currently Learning</h2>
+
+                    <ul>
+                        <li>HTML</li>
+                        <li>CSS</li>
+                        <li>JavaScript</li>
+                        <li>Computer Networking</li>
+                        <li>Cybersecurity Fundamentals</li>
+                    </ul>
+                </div>
+
+                <div id="certifications">
+                    <h2>Certifications</h2>
+                    <ul>
+                        <li>Introduction to Cisco Cybersecurity</li>
+                        <li>Introduction to Cisco Packet Tracer</li>
+                        <li>Cisco Networking Basics</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <section id="projects">
+            <h1>Academic Projects</h1>
+
+            <div>
+                <h2>Personal Portfolio Website</h2>
+                <p>
+                    A responsive portfolio website created while learning
+                    HTML, CSS, and JavaScript.
+                </p>
+            </div>
+
+            <div>
+                <h2>Packet Tracer Network Lab</h2>
+                <p>
+                    A basic networking exercise completed using Cisco Packet Tracer
+                    to practise network configuration and connectivity.
+                </p>
+            </div>
+        </section>
+        <section id="planner">
+            <h1>Academic Task Planner</h1>
+            <p>
+                A simple study tool for adding and organising academic tasks.
+            </p>
+            <div>
+                <form action="" method="post">
+                    <label for="taskName">
+                        <p>Enter New Academic Task:</p>
+                    </label>
+                    <input type="text" id="taskName" placeholder="e.g. Complete COS 106 Lab Report">
+                    <button>Add Task</button>
+                </form>
+            </div>
+        </section>
+        <section id="contact">
+            <div id="contact-form">
+                <h1>Get In Touch</h1>
+
+                <p>
+                    Have a question, feedback, or an opportunity to collaborate?
+                    Feel free to send me a message.
+                </p>
+                <form id="contactForm">
+                    <div>
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div>
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div>
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div>
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit">Send Message</button>
+                </form>
+                <p id="formError"></p>
             </div>
         </section>
     </main>
 
     <footer>
         <div>
-            <p>&copy; 2026 | Made with &hearts; and Deep Thinking | Daniella Eboma</p>
+            <!-- Social Media Links -->
+            <ul class="social-icon">
+                <li><a href="#"><img src="images/svgs/linkedin-transparent.svg" alt="LinkedIn"></a></li>
+                <li><a href="#"><img src="images/svgs/email-transparent.svg" alt="Email"></a></li>
+                <li><a href="#"><img src="images/svgs/github-transparent.svg" alt="Github"></a></li>
+            </ul>
+        </div>
+        <div>
+            <p>
+                &copy; 2026 Daniella Eboma | Built with HTML, CSS, JavaScript &hearts;
+            </p>
         </div>
     </footer>
     <script src="script.js"></script>

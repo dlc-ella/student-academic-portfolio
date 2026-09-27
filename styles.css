@@ -1,3 +1,16 @@
 body{
     background-color: #fff0f3;
 }
+
+.social-icon {
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.social-icon li {
+    width: 28px;
+  height: 28px;
+  color: #4A0D18;
+}
