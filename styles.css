@@ -1,16 +1,416 @@
-body{
+:root {
+    --oxblood: #4A0D18;
+    --claret: #7A1E2E;
+    --madder: #B03A48;
+    --petal: #F7D6DC;
+    --blush: #fff0f3;
+    --ink: #2A0A10;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
     background-color: #fff0f3;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.7;
+}
+
+h1,
+h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--oxblood);
+    line-height: 1.2;
+}
+
+a {
+    color: var(--claret);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid var(--madder);
+    outline-offset: 3px;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: var(--blush);
+    border-bottom: 2px solid var(--oxblood);
+}
+
+nav {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0.9rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+nav h1 {
+    font-size: 1.35rem;
+}
+
+nav h1::before {
+    content: "";
+    display: inline-block;
+    width: 0.7rem;
+    height: 0.7rem;
+    margin-right: 0.6rem;
+    background-color: var(--madder);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.75rem;
+}
+
+nav ul a {
+    color: var(--oxblood);
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+nav ul a:hover {
+    border-bottom-color: var(--madder);
+}
+
+nav > div:last-child a {
+    display: inline-block;
+    padding: 0.45rem 1.1rem;
+    border: 2px solid var(--oxblood);
+    color: var(--oxblood);
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+nav > div:last-child a:hover {
+    background-color: var(--oxblood);
+    color: var(--blush);
+}
+
+main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+main > section {
+    padding: 4rem 0;
+    border-bottom: 1px solid var(--petal);
+}
+
+main > section:last-child {
+    border-bottom: none;
+}
+
+main > section > h1,
+#education h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+    border-left: 6px solid var(--madder);
+}
+
+main > section:first-child img {
+    display: block;
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    margin-bottom: 3rem;
+    border: 2px solid var(--oxblood);
+    box-shadow: 12px 12px 0 var(--petal), 12px 12px 0 2px var(--oxblood);
+    filter: sepia(0.5) hue-rotate(-30deg) saturate(1.2);
+}
+
+main > section:first-child > div h1 {
+    font-size: clamp(2.4rem, 7vw, 4rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+}
+
+main > section:first-child > div > p:first-of-type {
+    color: var(--claret);
+    font-style: italic;
+    font-size: 1.15rem;
+    margin-bottom: 1.5rem;
+}
+
+#keyword-animation {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.75rem;
+}
+
+#keyword-animation p {
+    background-color: var(--oxblood);
+    color: var(--oxblood);
+    padding: 0.2rem 1rem;
+    line-height: 1.5;
+    border: 2px solid var(--oxblood);
+    transition: background-color 0.25s, color 0.25s;
+}
+
+#keyword-animation p:hover {
+    background-color: transparent;
+    color: var(--oxblood);
+}
+
+#keyword-animation p {
+    color: var(--blush);
+}
+
+main > section:first-child > div > p:last-of-type {
+    max-width: 60ch;
+    margin-bottom: 2rem;
+    font-family: Georgia, serif;
+    font-size: 1.1rem;
+}
+
+main > section:first-child > div > a {
+    display: inline-block;
+    padding: 0.75rem 1.6rem;
+    background-color: var(--oxblood);
+    color: var(--blush);
+    text-decoration: none;
+    border: 2px solid var(--oxblood);
+    transition: background-color 0.2s, color 0.2s;
+}
+
+main > section:first-child > div > a:hover {
+    background-color: transparent;
+    color: var(--oxblood);
+}
+
+#about > div {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+#education {
+    grid-column: 1 / -1;
+}
+
+#education h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+#education p:first-of-type {
+    color: var(--claret);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+#aspirations,
+#skills,
+#certifications {
+    background-color: #fff;
+    border: 1px solid var(--petal);
+    border-top: 5px solid var(--claret);
+    padding: 1.5rem;
+}
+
+#aspirations {
+    grid-column: 1 / -1;
+}
+
+#aspirations h2,
+#skills h2,
+#certifications h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+#skills ul,
+#certifications ul {
+    padding-left: 1.2rem;
+}
+
+#skills li::marker,
+#certifications li::marker {
+    color: var(--madder);
+}
+
+#projects > div {
+    padding: 1.25rem 0 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 2px solid var(--oxblood);
+    position: relative;
+}
+
+#projects > div::before {
+    content: "";
+    position: absolute;
+    left: -7px;
+    top: 1.65rem;
+    width: 12px;
+    height: 12px;
+    background-color: var(--madder);
+    border: 2px solid var(--blush);
+}
+
+#projects h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.4rem;
+}
+
+#projects p {
+    max-width: 60ch;
+}
+
+#planner > p {
+    margin-bottom: 1.5rem;
+}
+
+#planner > div {
+    background-color: var(--oxblood);
+    padding: 1.75rem;
+}
+
+#planner form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: end;
+}
+
+#planner label {
+    flex-basis: 100%;
+    color: var(--petal);
+}
+
+#planner input {
+    flex: 1 1 260px;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    font: inherit;
+    color: var(--ink);
+    background-color: #fff;
+    border: 2px solid var(--petal);
+    border-radius: 0;
+}
+
+input:focus,
+textarea:focus {
+    border-color: var(--madder);
+}
+
+button {
+    padding: 0.7rem 1.5rem;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: var(--madder);
+    color: #fff;
+    border: 2px solid var(--madder);
+    transition: background-color 0.2s, color 0.2s;
+}
+
+button:hover {
+    background-color: transparent;
+    color: var(--madder);
+}
+
+#planner button:hover {
+    color: var(--petal);
+    border-color: var(--petal);
+}
+
+#contact-form {
+    max-width: 620px;
+}
+
+#contact-form > p {
+    margin-bottom: 1.5rem;
+}
+
+#contactForm > div {
+    margin-bottom: 1.1rem;
+}
+
+#contactForm label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    color: var(--oxblood);
+}
+
+#contactForm button:hover {
+    color: var(--madder);
+}
+
+#formError {
+    margin-top: 1rem;
+    color: var(--claret);
+    font-weight: 600;
+}
+
+footer {
+    margin-top: 2rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    background-color: var(--petal);
+    border-top: 4px solid var(--oxblood);
+}
+
+footer p {
+    font-size: 0.9rem;
+    color: var(--oxblood);
 }
 
 .social-icon {
-  list-style: none;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    max-width: 240px;
+    margin: 0 auto 1rem;
 }
 
 .social-icon li {
     width: 28px;
-  height: 28px;
-  color: #4A0D18;
+    height: 28px;
+    color: #4A0D18;
+}
+
+.social-icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.2s;
+}
+
+.social-icon a:hover img {
+    transform: translateY(-3px);
+}
+
+@media (max-width: 640px) {
+    nav {
+        justify-content: center;
+    }
+
+    main > section {
+        padding: 3rem 0;
+    }
 }
