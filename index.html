@@ -4,57 +4,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Portfolio of Daniella Eboma, a first-year cybersecurity student learning networking and web development.">
     <title>Daniella Eboma | Portfolio</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body>
+<body id="top">
     <header>
-        <nav>
-            <div>
-                <h1>Daniella Eboma</h1>
-            </div>
-            <div>
-                <ul>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#projects">Projects</a></li>
-                </ul>
-            </div>
-            <div>
-                <a href="#contact">Contact Me</a>
-            </div>
+        <nav aria-label="Main">
+            <a class="brand" href="#top">Daniella Eboma</a>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+            </ul>
+            <a class="contact-link" href="#contact">Contact Me</a>
         </nav>
     </header>
 
     <main>
-        <section>
-            <img src="https://images.unsplash.com/photo-1769504115756-b680ea4485fe" alt="Image">
+        <section class="hero">
+            <img src="https://images.unsplash.com/photo-1769504115756-b680ea4485fe?w=1400&auto=format&fit=crop" alt=""
+                width="1400" height="480">
             <div>
                 <h1>Cybersecurity Student</h1>
+                <p class="tagline">Learning • Building • Exploring</p>
 
-                <p>Learning • Building • Exploring</p>
+                <ul class="keywords">
+                    <li>Cybersecurity</li>
+                    <li>Networking</li>
+                    <li>Web Development</li>
+                </ul>
 
-                <div id="keyword-animation">
-                    <p>Cybersecurity</p>
-                    <p>Networking</p>
-                    <p>Web Development</p>
-                </div>
-
-                <p>
+                <p class="intro">
                     A first-year cybersecurity student learning how technology,
                     networks, and the web work while building my skills one project at a time.
                 </p>
 
-                <a href="#about">Learn More About Me</a>
+                <a class="button" href="#about">Learn More About Me</a>
             </div>
         </section>
-        <section id="about">
-            <div>
 
+        <section id="about" aria-labelledby="about-title">
+            <h2 id="about-title">About Me</h2>
+
+            <div class="about-grid">
                 <div id="education">
-                    <h1>About Me</h1>
-                    <h2>Educational Background</h2>
-                    <p>B.Sc. Cybersecurity — 100 Level | 2026–Present</p>
+                    <h3>Educational Background</h3>
+                    <p class="detail">B.Sc. Cybersecurity — 100 Level | Miva Open University | 2026 – Present</p>
                     <p>
                         I am currently building a foundation in cybersecurity,
                         networking, programming, and web technologies.
@@ -62,8 +59,7 @@
                 </div>
 
                 <div id="aspirations">
-                    <h2>Career Aspirations</h2>
-
+                    <h3>Career Aspirations</h3>
                     <p>
                         My goal is to develop a strong foundation in cybersecurity,
                         networking, and programming. I am also learning web development
@@ -74,8 +70,7 @@
                 </div>
 
                 <div id="skills">
-                    <h2>Currently Learning</h2>
-
+                    <h3>Currently Learning</h3>
                     <ul>
                         <li>HTML</li>
                         <li>CSS</li>
@@ -86,7 +81,7 @@
                 </div>
 
                 <div id="certifications">
-                    <h2>Certifications</h2>
+                    <h3>Certifications</h3>
                     <ul>
                         <li>Introduction to Cisco Cybersecurity</li>
                         <li>Introduction to Cisco Packet Tracer</li>
@@ -95,60 +90,48 @@
                 </div>
             </div>
         </section>
-        <section id="projects">
-            <h1>Academic Projects</h1>
 
-            <div>
-                <h2>Personal Portfolio Website</h2>
+        <section id="projects" aria-labelledby="projects-title">
+            <h2 id="projects-title">Academic Projects</h2>
+
+            <article>
+                <h3>Personal Portfolio Website</h3>
                 <p>
                     A responsive portfolio website created while learning
                     HTML, CSS, and JavaScript.
                 </p>
-            </div>
+            </article>
 
-            <div>
-                <h2>Packet Tracer Network Lab</h2>
+            <article>
+                <h3>Packet Tracer Network Lab</h3>
                 <p>
                     A basic networking exercise completed using Cisco Packet Tracer
                     to practise network configuration and connectivity.
                 </p>
-            </div>
+            </article>
         </section>
-        <section id="planner">
-            <h1>Academic Task Planner</h1>
-            <p>
-                A simple study tool for adding and organising academic tasks.
-            </p>
-            <div>
-                <form action="" method="post">
-                    <label for="taskName">
-                        <p>Enter New Academic Task:</p>
-                    </label>
-                    <input type="text" id="taskName" placeholder="e.g. Complete COS 106 Lab Report">
-                    <button>Add Task</button>
-                </form>
-            </div>
-        </section>
-        <section id="contact">
+
+        <section id="contact" aria-labelledby="contact-title">
             <div id="contact-form">
-                <h1>Get In Touch</h1>
+                <h2 id="contact-title">Get In Touch</h2>
 
                 <p>
                     Have a question, feedback, or an opportunity to collaborate?
                     Feel free to send me a message.
                 </p>
-                <form id="contactForm">
+
+                <form action="mailto:your-email@example.com" method="post" enctype="text/plain">
                     <div>
                         <label for="name">Name</label>
-                        <input type="text" id="name" name="name" required>
+                        <input type="text" id="name" name="name" autocomplete="name" required>
                     </div>
                     <div>
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" id="email" name="email" autocomplete="email" required>
                     </div>
                     <div>
                         <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" required>
+                        <input type="tel" id="phone" name="phone" autocomplete="tel">
                     </div>
                     <div>
                         <label for="message">Message</label>
@@ -156,27 +139,23 @@
                     </div>
                     <button type="submit">Send Message</button>
                 </form>
-                <p id="formError"></p>
             </div>
         </section>
     </main>
 
     <footer>
-        <div>
-            <!-- Social Media Links -->
-            <ul class="social-icon">
-                <li><a href="#"><img src="images/svgs/linkedin-transparent.svg" alt="LinkedIn"></a></li>
-                <li><a href="#"><img src="images/svgs/email-transparent.svg" alt="Email"></a></li>
-                <li><a href="#"><img src="images/svgs/github-transparent.svg" alt="Github"></a></li>
-            </ul>
-        </div>
-        <div>
-            <p>
-                &copy; 2026 Daniella Eboma | Built with HTML, CSS, JavaScript &hearts;
-            </p>
-        </div>
+        <ul class="social-icon">
+            <li><a href="https://www.linkedin.com/in/your-username" target="_blank" rel="noopener"><img
+                        src="images/svgs/linkedin-transparent.svg" alt="LinkedIn"></a></li>
+            <li><a href="mailto:your-email@example.com"><img src="images/svgs/email-transparent.svg" alt="Email"></a>
+            </li>
+            <li><a href="https://github.com/your-username" target="_blank" rel="noopener"><img
+                        src="images/svgs/github-transparent.svg" alt="GitHub"></a></li>
+        </ul>
+        <p>
+            &copy; 2026 Daniella Eboma | Built with HTML and CSS &hearts;
+        </p>
     </footer>
-    <script src="script.js"></script>
 </body>
 
 </html>
