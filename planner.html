@@ -1,3 +1,58 @@
-<main>
-    <a href="/">< Home Page</a>
-</main>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="An academic task planner for adding, completing and deleting study tasks.">
+    <title>Planner | Daniella Eboma</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <nav aria-label="Main">
+            <a class="brand" href="index.html">Daniella Eboma</a>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="planner.html" aria-current="page">Planner</a></li>
+            </ul>
+            <a class="contact-link" href="contact.html">Contact Me</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="planner">
+            <h1 class="page-title">Academic Task Planner</h1>
+            <p class="lead">
+                A simple study tool for adding and organising academic tasks.
+            </p>
+
+            <div class="planner-panel">
+                <form id="taskForm">
+                    <label for="taskName">Enter New Academic Task:</label>
+                    <div class="task-row">
+                        <input type="text" id="taskName" placeholder="e.g. Complete COS 106 Lab Report">
+                        <button type="submit">Add Task</button>
+                    </div>
+                </form>
+            </div>
+
+            <ul id="taskList"></ul>
+            <p id="emptyMessage" class="lead">No tasks yet.</p>
+        </section>
+    </main>
+
+    <footer>
+        <ul class="social-icon">
+            <li><a href="https://www.linkedin.com/in/your-username" target="_blank" rel="noopener"><img src="images/svgs/linkedin-transparent.svg" alt="LinkedIn"></a></li>
+            <li><a href="mailto:your-email@example.com"><img src="images/svgs/email-transparent.svg" alt="Email"></a></li>
+            <li><a href="https://github.com/your-username" target="_blank" rel="noopener"><img src="images/svgs/github-transparent.svg" alt="GitHub"></a></li>
+        </ul>
+        <p>&copy; 2026 Daniella Eboma | Built with HTML and CSS &hearts;</p>
+    </footer>
+</body>
+
+</html>

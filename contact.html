@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Send a message to Daniella Eboma.">
+    <title>Contact | Daniella Eboma</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <nav aria-label="Main">
+            <a class="brand" href="index.html">Daniella Eboma</a>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="planner.html">Planner</a></li>
+            </ul>
+            <a class="contact-link" href="contact.html" aria-current="page">Contact Me</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="contact">
+            <div id="contact-form">
+                <h1 class="page-title">Get In Touch</h1>
+
+                <p class="lead">
+                    Have a question, feedback, or an opportunity to collaborate?
+                    Feel free to send me a message.
+                </p>
+
+                <form id="contactForm" action="mailto:your-email@example.com" method="post" enctype="text/plain" novalidate>
+                    <div>
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" autocomplete="name">
+                    </div>
+                    <div>
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" autocomplete="email">
+                    </div>
+                    <div>
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" autocomplete="tel">
+                    </div>
+                    <div>
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5"></textarea>
+                    </div>
+                    <button type="submit">Send Message</button>
+                    <p id="formError" role="alert"></p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <ul class="social-icon">
+            <li><a href="https://www.linkedin.com/in/your-username" target="_blank" rel="noopener"><img src="images/svgs/linkedin-transparent.svg" alt="LinkedIn"></a></li>
+            <li><a href="mailto:your-email@example.com"><img src="images/svgs/email-transparent.svg" alt="Email"></a></li>
+            <li><a href="https://github.com/your-username" target="_blank" rel="noopener"><img src="images/svgs/github-transparent.svg" alt="GitHub"></a></li>
+        </ul>
+        <p>&copy; 2026 Daniella Eboma | Built with HTML and CSS &hearts;</p>
+    </footer>
+</body>
+
+</html>

@@ -89,7 +89,8 @@ nav {
 nav ul {
     list-style: none;
     display: flex;
-    gap: 1.75rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
 }
 
 nav ul a {
@@ -99,7 +100,8 @@ nav ul a {
     transition: border-color 0.2s;
 }
 
-nav ul a:hover {
+nav ul a:hover,
+nav ul a[aria-current="page"] {
     border-bottom-color: var(--madder);
 }
 
@@ -117,6 +119,7 @@ nav ul a:hover {
 }
 
 .contact-link:hover,
+.contact-link[aria-current="page"],
 .button {
     background-color: var(--oxblood);
     color: var(--blush);
@@ -137,36 +140,53 @@ main {
     padding: 0 1.5rem;
 }
 
-main>section {
+main > section {
     padding: 4rem 0;
     border-bottom: 1px solid var(--petal);
 }
 
-main>section:last-child {
+main > section:last-child {
     border-bottom: none;
 }
 
-main>section>h2,
-#contact-form h2 {
+.page-title,
+.section-title {
     font-size: 2rem;
     margin-bottom: 1.5rem;
     padding-left: 1rem;
     border-left: 6px solid var(--madder);
 }
 
-.hero img {
+.lead {
+    max-width: 60ch;
+    margin-bottom: 1.5rem;
+}
+
+.hero {
+    display: grid;
+    grid-template-columns: minmax(220px, 320px) 1fr;
+    gap: 3.5rem;
+    align-items: center;
+}
+
+.portrait img {
     display: block;
     width: 100%;
-    height: 240px;
+    aspect-ratio: 4 / 5;
     object-fit: cover;
-    margin-bottom: 3rem;
+    background-color: var(--petal);
     border: 2px solid var(--oxblood);
     box-shadow: 12px 12px 0 var(--petal), 12px 12px 0 2px var(--oxblood);
-    filter: sepia(0.5) hue-rotate(-30deg) saturate(1.2);
+}
+
+.welcome {
+    color: var(--madder);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
 }
 
 .hero h1 {
-    font-size: clamp(2.4rem, 7vw, 4rem);
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
     letter-spacing: -0.02em;
     margin-bottom: 0.75rem;
 }
@@ -214,14 +234,12 @@ main>section>h2,
 }
 
 #education,
-#aspirations {
+#aspirations,
+#certifications {
     grid-column: 1 / -1;
 }
 
-#education h3,
-#aspirations h3,
-#skills h3,
-#certifications h3 {
+.about-grid h2 {
     font-size: 1.25rem;
     margin-bottom: 0.6rem;
 }
@@ -234,6 +252,7 @@ main>section>h2,
 
 #aspirations,
 #skills,
+#hobbies,
 #certifications {
     background-color: #fff;
     border: 1px solid var(--petal);
@@ -241,34 +260,46 @@ main>section>h2,
     padding: 1.5rem;
 }
 
-#skills ul {
+#skills ul,
+#hobbies ul {
     padding-left: 1.2rem;
 }
 
-#skills li::marker {
+#skills li::marker,
+#hobbies li::marker {
     color: var(--madder);
 }
 
-#certifications ul {
-    list-style: none;
+.table-wrap {
+    overflow-x: auto;
 }
 
-#certifications li {
-    padding: 0.5rem 0.9rem;
-    margin-bottom: 0.7rem;
-    border: 2px dashed var(--madder);
-    color: var(--oxblood);
-    transform: rotate(-0.6deg);
+table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-#certifications li:nth-child(even) {
-    transform: rotate(0.6deg);
+th,
+td {
+    padding: 0.7rem 1rem;
+    text-align: left;
+    border-bottom: 1px dashed var(--madder);
+}
+
+th {
+    background-color: var(--oxblood);
+    color: var(--blush);
+    border-bottom: none;
 }
 
 #projects article {
     position: relative;
-    padding: 1.25rem 0 1.25rem 1.5rem;
-    margin-bottom: 1rem;
+    display: grid;
+    grid-template-columns: minmax(200px, 340px) 1fr;
+    gap: 2rem;
+    align-items: center;
+    padding: 1.25rem 0 1.25rem 2rem;
+    margin-bottom: 1.5rem;
     border-left: 2px solid var(--oxblood);
 }
 
@@ -276,32 +307,97 @@ main>section>h2,
     content: "";
     position: absolute;
     left: -7px;
-    top: 1.65rem;
+    top: 2rem;
     width: 12px;
     height: 12px;
     background-color: var(--madder);
     border: 2px solid var(--blush);
 }
 
-#projects h3 {
+#projects figure img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background-color: var(--petal);
+    border: 2px solid var(--oxblood);
+    box-shadow: 6px 6px 0 var(--petal);
+}
+
+#projects h2 {
     font-size: 1.3rem;
     margin-bottom: 0.4rem;
 }
 
-#projects p {
-    max-width: 60ch;
+.project-links {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-top: 0.75rem;
+}
+
+video {
+    display: block;
+    width: 100%;
+    max-width: 720px;
+    background-color: var(--oxblood);
+    border: 2px solid var(--oxblood);
+    box-shadow: 8px 8px 0 var(--petal);
+}
+
+.planner-panel {
+    background-color: var(--oxblood);
+    padding: 1.75rem;
+    margin-bottom: 2rem;
+}
+
+.planner-panel label {
+    color: var(--petal);
+}
+
+.task-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.task-row input {
+    flex: 1 1 260px;
+}
+
+#taskList {
+    list-style: none;
+}
+
+#taskList li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.6rem;
+    background-color: #fff;
+    border: 1px solid var(--petal);
+    border-left: 5px solid var(--madder);
+}
+
+#taskList li.done span {
+    text-decoration: line-through;
+    color: var(--claret);
+    opacity: 0.7;
 }
 
 #contact-form {
     max-width: 620px;
 }
 
-#contact-form>p {
-    margin-bottom: 1.5rem;
-}
-
 form div {
     margin-bottom: 1.1rem;
+}
+
+.task-row {
+    margin-bottom: 0;
 }
 
 label {
@@ -341,6 +437,17 @@ button {
 button:hover {
     background-color: transparent;
     color: var(--madder);
+}
+
+.planner-panel button:hover {
+    color: var(--petal);
+    border-color: var(--petal);
+}
+
+#formError {
+    margin-top: 1rem;
+    color: var(--claret);
+    font-weight: 600;
 }
 
 footer {
@@ -383,13 +490,28 @@ footer p {
     box-shadow: 0 0 10px #7A1E2E;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 720px) {
     nav {
         justify-content: center;
     }
 
-    main>section {
+    main > section {
         padding: 3rem 0;
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
+    .portrait {
+        max-width: 280px;
+    }
+
+    #projects article {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding-left: 1.25rem;
     }
 }
 

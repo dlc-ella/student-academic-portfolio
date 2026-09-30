@@ -4,29 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Portfolio of Daniella Eboma, a first-year cybersecurity student learning networking and web development.">
-    <title>Daniella Eboma | Portfolio</title>
+    <meta name="description" content="Portfolio of Daniella Eboma, a first-year cybersecurity student learning networking and web development.">
+    <title>Home | Daniella Eboma</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body id="top">
+<body>
     <header>
         <nav aria-label="Main">
-            <a class="brand" href="#top">Daniella Eboma</a>
+            <a class="brand" href="index.html">Daniella Eboma</a>
             <ul>
-                <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
+                <li><a href="index.html" aria-current="page">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="planner.html">Planner</a></li>
             </ul>
-            <a class="contact-link" href="#contact">Contact Me</a>
+            <a class="contact-link" href="contact.html">Contact Me</a>
         </nav>
     </header>
 
     <main>
         <section class="hero">
-            <img src="https://images.unsplash.com/photo-1769504115756-b680ea4485fe?w=1400&auto=format&fit=crop" alt=""
-                width="1400" height="480">
+            <figure class="portrait">
+                <img src="images/daniella.jpg" alt="Portrait of Daniella Eboma" width="800" height="1000">
+            </figure>
             <div>
+                <p class="welcome">Welcome to my portfolio</p>
                 <h1>Cybersecurity Student</h1>
                 <p class="tagline">Learning • Building • Exploring</p>
 
@@ -41,120 +44,18 @@
                     networks, and the web work while building my skills one project at a time.
                 </p>
 
-                <a class="button" href="#about">Learn More About Me</a>
-            </div>
-        </section>
-
-        <section id="about" aria-labelledby="about-title">
-            <h2 id="about-title">About Me</h2>
-
-            <div class="about-grid">
-                <div id="education">
-                    <h3>Educational Background</h3>
-                    <p class="detail">B.Sc. Cybersecurity — 100 Level | Miva Open University | 2026 – Present</p>
-                    <p>
-                        I am currently building a foundation in cybersecurity,
-                        networking, programming, and web technologies.
-                    </p>
-                </div>
-
-                <div id="aspirations">
-                    <h3>Career Aspirations</h3>
-                    <p>
-                        My goal is to develop a strong foundation in cybersecurity,
-                        networking, and programming. I am also learning web development
-                        to better understand how websites and web applications are built.
-                        As I progress in my studies, I hope to explore different areas of
-                        cybersecurity and discover where my interests fit best.
-                    </p>
-                </div>
-
-                <div id="skills">
-                    <h3>Currently Learning</h3>
-                    <ul>
-                        <li>HTML</li>
-                        <li>CSS</li>
-                        <li>JavaScript</li>
-                        <li>Computer Networking</li>
-                        <li>Cybersecurity Fundamentals</li>
-                    </ul>
-                </div>
-
-                <div id="certifications">
-                    <h3>Certifications</h3>
-                    <ul>
-                        <li>Introduction to Cisco Cybersecurity</li>
-                        <li>Introduction to Cisco Packet Tracer</li>
-                        <li>Cisco Networking Basics</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section id="projects" aria-labelledby="projects-title">
-            <h2 id="projects-title">Academic Projects</h2>
-
-            <article>
-                <h3>Personal Portfolio Website</h3>
-                <p>
-                    A responsive portfolio website created while learning
-                    HTML, CSS, and JavaScript.
-                </p>
-            </article>
-
-            <article>
-                <h3>Packet Tracer Network Lab</h3>
-                <p>
-                    A basic networking exercise completed using Cisco Packet Tracer
-                    to practise network configuration and connectivity.
-                </p>
-            </article>
-        </section>
-
-        <section id="contact" aria-labelledby="contact-title">
-            <div id="contact-form">
-                <h2 id="contact-title">Get In Touch</h2>
-
-                <p>
-                    Have a question, feedback, or an opportunity to collaborate?
-                    Feel free to send me a message.
-                </p>
-
-                <form action="mailto:your-email@example.com" method="post" enctype="text/plain">
-                    <div>
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="name" autocomplete="name" required>
-                    </div>
-                    <div>
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" autocomplete="email" required>
-                    </div>
-                    <div>
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" autocomplete="tel">
-                    </div>
-                    <div>
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="5" required></textarea>
-                    </div>
-                    <button type="submit">Send Message</button>
-                </form>
+                <a class="button" href="about.html">Learn More About Me</a>
             </div>
         </section>
     </main>
 
     <footer>
         <ul class="social-icon">
-            <li><a href="https://www.linkedin.com/in/your-username" target="_blank" rel="noopener"><img
-                        src="images/svgs/linkedin-transparent.svg" alt="LinkedIn"></a></li>
-            <li><a href="mailto:your-email@example.com"><img src="images/svgs/email-transparent.svg" alt="Email"></a>
-            </li>
-            <li><a href="https://github.com/your-username" target="_blank" rel="noopener"><img
-                        src="images/svgs/github-transparent.svg" alt="GitHub"></a></li>
+            <li><a href="https://www.linkedin.com/in/your-username" target="_blank" rel="noopener"><img src="images/svgs/linkedin-transparent.svg" alt="LinkedIn"></a></li>
+            <li><a href="mailto:your-email@example.com"><img src="images/svgs/email-transparent.svg" alt="Email"></a></li>
+            <li><a href="https://github.com/your-username" target="_blank" rel="noopener"><img src="images/svgs/github-transparent.svg" alt="GitHub"></a></li>
         </ul>
-        <p>
-            &copy; 2026 Daniella Eboma | Built with HTML and CSS &hearts;
-        </p>
+        <p>&copy; 2026 Daniella Eboma | Built with HTML and CSS &hearts;</p>
     </footer>
 </body>
 
