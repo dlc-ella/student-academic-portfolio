@@ -140,12 +140,12 @@ main {
     padding: 0 1.5rem;
 }
 
-main > section {
+main>section {
     padding: 4rem 0;
     border-bottom: 1px solid var(--petal);
 }
 
-main > section:last-child {
+main>section:last-child {
     border-bottom: none;
 }
 
@@ -169,14 +169,29 @@ main > section:last-child {
     align-items: center;
 }
 
+.portrait {
+    position: relative;
+    margin: 18px;
+}
+
+.portrait::after {
+    content: "";
+    position: absolute;
+    top: -21px;
+    left: -21px;
+    width: 14px;
+    height: 14px;
+    background-color: var(--madder);
+}
+
 .portrait img {
     display: block;
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     background-color: var(--petal);
-    border: 2px solid var(--oxblood);
-    box-shadow: 12px 12px 0 var(--petal), 12px 12px 0 2px var(--oxblood);
+    outline: 2px solid var(--oxblood);
+    outline-offset: 12px;
 }
 
 .welcome {
@@ -314,14 +329,18 @@ th {
     border: 2px solid var(--blush);
 }
 
+#projects figure {
+    margin: 10px;
+}
+
 #projects figure img {
     display: block;
     width: 100%;
     aspect-ratio: 16 / 9;
     object-fit: cover;
     background-color: var(--petal);
-    border: 2px solid var(--oxblood);
-    box-shadow: 6px 6px 0 var(--petal);
+    outline: 2px solid var(--oxblood);
+    outline-offset: 8px;
 }
 
 #projects h2 {
@@ -495,7 +514,7 @@ footer p {
         justify-content: center;
     }
 
-    main > section {
+    main>section {
         padding: 3rem 0;
     }
 
