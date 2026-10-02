@@ -407,6 +407,56 @@ video {
     opacity: 0.7;
 }
 
+#taskList .task-label {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex: 1;
+    margin: 0;
+    font-weight: 400;
+    color: var(--ink);
+    cursor: pointer;
+}
+
+#taskList input[type="checkbox"] {
+    flex: none;
+    width: 1.2rem;
+    height: 1.2rem;
+    padding: 0;
+    accent-color: var(--madder);
+}
+
+#taskList li.done {
+    border-left-color: var(--petal);
+    background-color: var(--blush);
+}
+
+#taskList li.done .task-text {
+    text-decoration: line-through;
+    color: var(--claret);
+    opacity: 0.7;
+}
+
+#taskList .delete-btn {
+    padding: 0.3rem 0.9rem;
+    font-size: 0.9rem;
+    background-color: transparent;
+    color: var(--oxblood);
+    border: 2px solid var(--oxblood);
+}
+
+#taskList .delete-btn:hover {
+    background-color: var(--oxblood);
+    color: var(--blush);
+}
+
+#taskCount {
+    margin-bottom: 1rem;
+    color: var(--claret);
+    font-weight: 600;
+}
+
+
 #contact-form {
     max-width: 620px;
 }
