@@ -96,13 +96,14 @@ nav ul {
 nav ul a {
     color: var(--oxblood);
     text-decoration: none;
-    border-bottom: 2px solid transparent;
-    transition: border-color 0.2s;
+    padding-bottom: 2px;
+    background: linear-gradient(var(--madder), var(--madder)) left bottom / 0 2px no-repeat;
+    transition: background-size 0.25s;
 }
 
 nav ul a:hover,
 nav ul a[aria-current="page"] {
-    border-bottom-color: var(--madder);
+    background-size: 100% 2px;
 }
 
 .contact-link,
@@ -224,15 +225,43 @@ main>section:last-child {
 .keywords li {
     padding: 0.2rem 1rem;
     line-height: 1.5;
-    background-color: var(--oxblood);
-    color: var(--blush);
+    color: var(--oxblood);
+    background-color: var(--blush);
     border: 2px solid var(--oxblood);
     transition: background-color 0.25s, color 0.25s;
+    position: relative;
+    overflow: hidden;
 }
 
 .keywords li:hover {
-    background-color: transparent;
-    color: var(--oxblood);
+    transform: translateY(-5px);
+}
+
+.keywords li::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--oxblood);
+    transform-origin: right;
+    animation: declassify 0.7s cubic-bezier(0.7, 0, 0.2, 1) forwards;
+}
+
+.keywords li:nth-child(1)::after {
+    animation-delay: 0.5s;
+}
+
+.keywords li:nth-child(2)::after {
+    animation-delay: 0.75s;
+}
+
+.keywords li:nth-child(3)::after {
+    animation-delay: 1s;
+}
+
+@keyframes declassify {
+    to {
+        transform: scaleX(0);
+    }
 }
 
 .intro {
@@ -310,7 +339,7 @@ th {
 #projects article {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(200px, 340px) 1fr;
+    grid-template-columns: minmax(200px, 200px) 1fr;
     gap: 2rem;
     align-items: center;
     padding: 1.25rem 0 1.25rem 2rem;
@@ -336,7 +365,7 @@ th {
 #projects figure img {
     display: block;
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     background-color: var(--petal);
     outline: 2px solid var(--oxblood);
@@ -582,6 +611,10 @@ footer p {
         gap: 1rem;
         padding-left: 1.25rem;
     }
+
+    #projects figure {
+        max-width: 300px;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -589,7 +622,14 @@ footer p {
         scroll-behavior: auto;
     }
 
-    * {
+    *,
+    *::before,
+    *::after {
         transition: none !important;
+        animation: none !important;
+    }
+
+    .keywords li::after {
+        display: none;
     }
 }
