@@ -588,6 +588,27 @@ footer p {
     box-shadow: 0 0 10px #7A1E2E;
 }
 
+.field-error {
+    margin-top: 0.3rem;
+    color: var(--claret);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.field-error:empty {
+    display: none;
+}
+
+input[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+    border-color: var(--madder);
+    border-left-width: 6px;
+}
+
+#formError[data-state="ok"] {
+    color: var(--oxblood);
+}
+
 @media (max-width: 720px) {
     nav {
         justify-content: center;
