@@ -175,15 +175,6 @@ main>section:last-child {
     margin: 18px;
 }
 
-.portrait::after {
-    content: "";
-    position: absolute;
-    top: -21px;
-    left: -21px;
-    width: 14px;
-    height: 14px;
-    background-color: var(--madder);
-}
 
 .portrait img {
     display: block;
