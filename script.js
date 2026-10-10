@@ -42,10 +42,46 @@ function makePrioritySelect(name, value) {
     return select;
 }
 
-function actionButton(className, label, ariaLabel, disabled) {
-    const button = el("button", className, label);
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+function createIcon(name) {
+    const svg = document.createElementNS(SVG_NS, "svg");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("class", "icon icon-" + name);
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("focusable", "false");
+
+    if (name === "grip") {
+        [[9, 6], [15, 6], [9, 12], [15, 12], [9, 18], [15, 18]].forEach(([cx, cy]) => {
+            const dot = document.createElementNS(SVG_NS, "circle");
+            dot.setAttribute("cx", cx);
+            dot.setAttribute("cy", cy);
+            dot.setAttribute("r", "1.7");
+            dot.setAttribute("fill", "currentColor");
+            svg.append(dot);
+        });
+        return svg;
+    }
+
+    const path = document.createElementNS(SVG_NS, "path");
+    path.setAttribute("d", name === "up" ? "M6 15l6-6 6 6" : "M6 9l6 6 6-6");
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke", "currentColor");
+    path.setAttribute("stroke-width", "2.6");
+    path.setAttribute("stroke-linecap", "round");
+    path.setAttribute("stroke-linejoin", "round");
+    svg.append(path);
+    return svg;
+}
+
+function actionButton(className, content, ariaLabel, disabled, tooltip) {
+    const button = el("button", className);
     button.type = "button";
+    button.append(content);
     button.setAttribute("aria-label", ariaLabel);
+    if (tooltip) {
+        button.title = tooltip;
+    }
     button.disabled = Boolean(disabled);
     return button;
 }
@@ -188,6 +224,7 @@ function initPlanner() {
     }
 
     const taskInput = document.getElementById("taskName");
+    const taskCounter = document.getElementById("taskCounter");
     const courseInput = document.getElementById("taskCourse");
     const dueInput = document.getElementById("taskDue");
     const priorityInput = document.getElementById("taskPriority");
@@ -196,8 +233,8 @@ function initPlanner() {
     const emptyMessage = document.getElementById("emptyMessage");
     const noMatch = document.getElementById("noMatch");
     const plannerTools = document.getElementById("plannerTools");
+    const plannerNotice = document.getElementById("plannerNotice");
     const taskCount = document.getElementById("taskCount");
-    const orderHint = document.getElementById("orderHint");
     const sortSelect = document.getElementById("sortBy");
     const filterButtons = document.querySelectorAll("[data-filter]");
 
@@ -205,11 +242,20 @@ function initPlanner() {
     let currentFilter = "all";
     let currentSort = loadSort();
     let editingId = null;
-    let draggedId = null;
     let pendingFocus = null;
+    let noticeTimer = 0;
+    let drag = null;
+    const expandedIds = new Set();
 
     const persist = () => saveTasks(tasks);
-    const canReorder = () => currentSort === "manual" && currentFilter === "all";
+
+    function showNotice(text) {
+        plannerNotice.textContent = text;
+        clearTimeout(noticeTimer);
+        noticeTimer = setTimeout(() => {
+            plannerNotice.textContent = "";
+        }, 7000);
+    }
 
     function matchesFilter(task) {
         if (currentFilter === "all") {
@@ -236,26 +282,58 @@ function initPlanner() {
         });
     }
 
-    function moveTask(id, direction) {
-        const index = tasks.findIndex((task) => task.id === id);
-        const target = index + direction;
-        if (index === -1 || target < 0 || target >= tasks.length) {
+    function commitVisibleOrder(reordered) {
+        const current = getVisibleTasks();
+        if (reordered.every((task, index) => task.id === current[index].id)) {
             return;
         }
-        [tasks[index], tasks[target]] = [tasks[target], tasks[index]];
+
+        const ids = new Set(reordered.map((task) => task.id));
+        const slots = [];
+        tasks.forEach((task, index) => {
+            if (ids.has(task.id)) {
+                slots.push(index);
+            }
+        });
+
+        const next = tasks.slice();
+        slots.forEach((slot, index) => {
+            next[slot] = reordered[index];
+        });
+        tasks = next;
+
+        if (currentSort !== "manual") {
+            currentSort = "manual";
+            sortSelect.value = "manual";
+            saveSort("manual");
+            showNotice("Sorting switched to My order so your new order stays.");
+        }
+    }
+
+    function moveTask(id, direction) {
+        const visible = getVisibleTasks();
+        const index = visible.findIndex((task) => task.id === id);
+        const target = index + direction;
+        if (index === -1 || target < 0 || target >= visible.length) {
+            return;
+        }
+        [visible[index], visible[target]] = [visible[target], visible[index]];
+        commitVisibleOrder(visible);
     }
 
     function moveTaskTo(id, targetId, placeAfter) {
-        if (id === targetId) {
+        const visible = getVisibleTasks();
+        const moving = visible.find((task) => task.id === id);
+        const rest = visible.filter((task) => task.id !== id);
+        const index = rest.findIndex((task) => task.id === targetId);
+        if (!moving || index === -1) {
             return;
         }
-        const moving = tasks.find((task) => task.id === id);
-        tasks = tasks.filter((task) => task.id !== id);
-        const index = tasks.findIndex((task) => task.id === targetId);
-        tasks.splice(placeAfter ? index + 1 : index, 0, moving);
+        rest.splice(placeAfter ? index + 1 : index, 0, moving);
+        commitVisibleOrder(rest);
     }
 
-    function createTaskItem(task, position, total, reorder) {
+    function createTaskItem(task, position, total) {
         if (task.id === editingId) {
             return createEditItem(task);
         }
@@ -269,15 +347,29 @@ function initPlanner() {
             item.classList.add("overdue");
         }
 
-        if (reorder) {
-            item.draggable = true;
-            item.append(el("span", "grip"));
+        const canMove = total > 1;
+        if (canMove) {
+            const grip = el("span", "grip");
+            grip.setAttribute("aria-hidden", "true");
+            grip.title = "Drag to reorder";
+            grip.append(createIcon("grip"));
+            item.append(grip);
         }
 
         const checkbox = el("input");
         checkbox.type = "checkbox";
+        checkbox.id = "task-check-" + task.id;
         checkbox.checked = task.done;
-        checkbox.setAttribute("aria-label", "Mark as completed: " + task.text);
+
+        const text = el("label", "task-text", task.text);
+        text.htmlFor = checkbox.id;
+        text.id = "task-text-" + task.id;
+
+        const more = el("button", "more-btn", "Show more");
+        more.type = "button";
+        more.hidden = true;
+        more.setAttribute("aria-expanded", "false");
+        more.setAttribute("aria-controls", text.id);
 
         const meta = el("span", "task-meta");
         if (task.course) {
@@ -291,17 +383,17 @@ function initPlanner() {
             }
         }
 
-        const main = el("span", "task-main");
-        main.append(el("span", "task-text", task.text), meta);
+        const main = el("div", "task-main");
+        main.append(text, more, meta);
 
-        const label = el("label", "task-label");
-        label.append(checkbox, main);
+        const body = el("div", "task-body");
+        body.append(checkbox, main);
 
         const actions = el("div", "task-actions");
-        if (reorder) {
+        if (canMove) {
             actions.append(
-                actionButton("move-up", "↑", "Move up: " + task.text, position === 0),
-                actionButton("move-down", "↓", "Move down: " + task.text, position === total - 1)
+                actionButton("move-up", createIcon("up"), "Move up: " + task.text, position === 0, "Move up"),
+                actionButton("move-down", createIcon("down"), "Move down: " + task.text, position === total - 1, "Move down")
             );
         }
         actions.append(
@@ -309,7 +401,7 @@ function initPlanner() {
             actionButton("delete-btn", "Delete", "Delete task: " + task.text)
         );
 
-        item.append(label, actions);
+        item.append(body, actions);
         return item;
     }
 
@@ -323,9 +415,9 @@ function initPlanner() {
 
         const textInput = makeInput("text", "text", task.text);
         textInput.className = "edit-text";
-        textInput.maxLength = 120;
+        textInput.maxLength = taskInput.maxLength;
         const courseField = makeInput("text", "course", task.course);
-        courseField.maxLength = 12;
+        courseField.maxLength = courseInput.maxLength;
         const dueField = makeInput("date", "due", task.due);
         const priorityField = makePrioritySelect("priority", task.priority);
 
@@ -350,6 +442,38 @@ function initPlanner() {
         return item;
     }
 
+    function updateClamps() {
+        taskList.querySelectorAll(".task").forEach((item) => {
+            const text = item.querySelector(".task-text");
+            const toggle = item.querySelector(".more-btn");
+            if (!text || !toggle) {
+                return;
+            }
+
+            const expanded = expandedIds.has(Number(item.dataset.id));
+            text.classList.toggle("clamped", !expanded);
+            const overflowing = text.scrollHeight > text.clientHeight + 1;
+
+            toggle.hidden = !expanded && !overflowing;
+            toggle.textContent = expanded ? "Show less" : "Show more";
+            toggle.setAttribute("aria-expanded", String(expanded));
+        });
+    }
+
+    function updateCounter() {
+        const length = taskInput.value.length;
+        const limit = taskInput.maxLength;
+        taskCounter.textContent = length === 0 ? "" : length + " / " + limit;
+
+        if (length >= limit) {
+            taskCounter.dataset.state = "full";
+        } else if (length >= limit - 20) {
+            taskCounter.dataset.state = "near";
+        } else {
+            taskCounter.dataset.state = "";
+        }
+    }
+
     function restoreFocus() {
         if (!pendingFocus) {
             return;
@@ -358,7 +482,7 @@ function initPlanner() {
         if (item) {
             pendingFocus.selectors.some((selector) => {
                 const target = item.querySelector(selector);
-                if (target && !target.disabled) {
+                if (target && !target.disabled && !target.hidden) {
                     target.focus();
                     return true;
                 }
@@ -370,11 +494,10 @@ function initPlanner() {
 
     function render() {
         const visible = getVisibleTasks();
-        const reorder = canReorder();
 
         taskList.innerHTML = "";
         visible.forEach((task, index) => {
-            taskList.appendChild(createTaskItem(task, index, visible.length, reorder));
+            taskList.appendChild(createTaskItem(task, index, visible.length));
         });
 
         const completed = tasks.filter((task) => task.done).length;
@@ -392,8 +515,8 @@ function initPlanner() {
         emptyMessage.hidden = hasTasks;
         plannerTools.hidden = !hasTasks;
         noMatch.hidden = !hasTasks || visible.length > 0;
-        orderHint.hidden = !(tasks.length > 1 && !reorder);
 
+        updateClamps();
         restoreFocus();
     }
 
@@ -423,12 +546,14 @@ function initPlanner() {
         persist();
         render();
         taskForm.reset();
+        updateCounter();
         taskInput.focus();
     });
 
     taskInput.addEventListener("input", () => {
         taskError.textContent = "";
         taskInput.removeAttribute("aria-invalid");
+        updateCounter();
     });
 
     taskList.addEventListener("change", (event) => {
@@ -452,6 +577,7 @@ function initPlanner() {
 
         if (button.classList.contains("delete-btn")) {
             tasks = tasks.filter((task) => task.id !== id);
+            expandedIds.delete(id);
             if (editingId === id) {
                 editingId = null;
             }
@@ -461,6 +587,13 @@ function initPlanner() {
         } else if (button.classList.contains("move-down")) {
             moveTask(id, 1);
             pendingFocus = { id: id, selectors: [".move-down", ".move-up"] };
+        } else if (button.classList.contains("more-btn")) {
+            if (expandedIds.has(id)) {
+                expandedIds.delete(id);
+            } else {
+                expandedIds.add(id);
+            }
+            pendingFocus = { id: id, selectors: [".more-btn"] };
         } else if (button.classList.contains("edit-btn")) {
             editingId = id;
             pendingFocus = { id: id, selectors: [".edit-text"] };
@@ -515,58 +648,121 @@ function initPlanner() {
     });
 
     function clearDropMarks() {
-        taskList.querySelectorAll(".drop-before, .drop-after, .dragging").forEach((node) => {
-            node.classList.remove("drop-before", "drop-after", "dragging");
-        });
-    }
-
-    taskList.addEventListener("dragstart", (event) => {
-        const item = event.target.closest(".task");
-        if (!item) {
-            return;
-        }
-        draggedId = Number(item.dataset.id);
-        event.dataTransfer.effectAllowed = "move";
-        event.dataTransfer.setData("text/plain", String(draggedId));
-        item.classList.add("dragging");
-    });
-
-    taskList.addEventListener("dragover", (event) => {
-        if (draggedId === null) {
-            return;
-        }
-        const item = event.target.closest(".task");
-        if (!item) {
-            return;
-        }
-        event.preventDefault();
         taskList.querySelectorAll(".drop-before, .drop-after").forEach((node) => {
             node.classList.remove("drop-before", "drop-after");
         });
-        if (Number(item.dataset.id) === draggedId) {
+    }
+
+    function findDropTarget(y) {
+        const rows = Array.from(taskList.querySelectorAll(".task")).filter((row) => row !== drag.item);
+        let last = null;
+
+        for (const row of rows) {
+            const box = row.getBoundingClientRect();
+            if (y < box.top + box.height / 2) {
+                return { row: row, after: false };
+            }
+            last = row;
+        }
+        return last ? { row: last, after: true } : null;
+    }
+
+    function updateDrag() {
+        const offset = drag.lastY - drag.startY + (window.scrollY - drag.startScroll);
+        drag.item.style.transform = "translateY(" + offset + "px)";
+
+        clearDropMarks();
+        drag.hit = findDropTarget(drag.lastY);
+        if (drag.hit) {
+            drag.hit.row.classList.add(drag.hit.after ? "drop-after" : "drop-before");
+        }
+    }
+
+    function dragLoop() {
+        if (!drag) {
             return;
         }
-        const box = item.getBoundingClientRect();
-        item.classList.add(event.clientY > box.top + box.height / 2 ? "drop-after" : "drop-before");
-    });
+        const edge = 90;
+        const speed = 14;
+        if (drag.lastY < edge) {
+            window.scrollBy({ top: -speed, behavior: "instant" });
+        } else if (drag.lastY > window.innerHeight - edge) {
+            window.scrollBy({ top: speed, behavior: "instant" });
+        }
+        updateDrag();
+        drag.frame = requestAnimationFrame(dragLoop);
+    }
 
-    taskList.addEventListener("drop", (event) => {
-        if (draggedId === null) {
+    function endDrag() {
+        if (!drag) {
+            return;
+        }
+        cancelAnimationFrame(drag.frame);
+        drag.item.classList.remove("dragging");
+        drag.item.style.transform = "";
+        taskList.classList.remove("is-dragging");
+        clearDropMarks();
+        drag = null;
+    }
+
+    taskList.addEventListener("pointerdown", (event) => {
+        const grip = event.target.closest(".grip");
+        if (!grip || drag || (event.pointerType === "mouse" && event.button !== 0)) {
             return;
         }
         event.preventDefault();
-        const item = event.target.closest(".task");
-        if (item) {
-            moveTaskTo(draggedId, Number(item.dataset.id), item.classList.contains("drop-after"));
-            persist();
-        }
-        draggedId = null;
-        render();
+
+        const item = grip.closest(".task");
+        grip.setPointerCapture(event.pointerId);
+        drag = {
+            id: Number(item.dataset.id),
+            item: item,
+            pointerId: event.pointerId,
+            startY: event.clientY,
+            startScroll: window.scrollY,
+            lastY: event.clientY,
+            hit: null,
+            frame: 0
+        };
+        item.classList.add("dragging");
+        taskList.classList.add("is-dragging");
+        drag.frame = requestAnimationFrame(dragLoop);
     });
 
-    taskList.addEventListener("dragend", () => {
-        draggedId = null;
-        clearDropMarks();
+    taskList.addEventListener("pointermove", (event) => {
+        if (drag && event.pointerId === drag.pointerId) {
+            drag.lastY = event.clientY;
+        }
+    });
+
+    taskList.addEventListener("pointerup", (event) => {
+        if (!drag || event.pointerId !== drag.pointerId) {
+            return;
+        }
+        drag.lastY = event.clientY;
+        updateDrag();
+
+        const id = drag.id;
+        const hit = drag.hit;
+        endDrag();
+
+        if (hit) {
+            moveTaskTo(id, Number(hit.row.dataset.id), hit.after);
+            persist();
+            render();
+        }
+    });
+
+    taskList.addEventListener("pointercancel", (event) => {
+        if (drag && event.pointerId === drag.pointerId) {
+            endDrag();
+        }
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && drag) {
+            endDrag();
+        }
     });
 
     filterButtons.forEach((button) => {
@@ -579,10 +775,18 @@ function initPlanner() {
     sortSelect.addEventListener("change", () => {
         currentSort = sortSelect.value;
         saveSort(currentSort);
+        plannerNotice.textContent = "";
         render();
     });
 
+    let resizeFrame = 0;
+    window.addEventListener("resize", () => {
+        cancelAnimationFrame(resizeFrame);
+        resizeFrame = requestAnimationFrame(updateClamps);
+    });
+
     sortSelect.value = currentSort;
+    updateCounter();
     render();
 }
 
@@ -770,7 +974,6 @@ if (contactForm) {
                     field.removeAttribute("aria-invalid");
                 });
                 setFormStatus("Message sent. Thank you, " + values.name.split(" ")[0] + ".", "ok");
-                alert("Message sent. Thank you, " + values.name.split(" ")[0] + ".", "ok");
             } else {
                 setFormStatus("Your message was not sent. Please try again.", "error");
             }

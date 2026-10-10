@@ -7,6 +7,7 @@
     <meta name="description" content="An academic task planner for adding, completing and deleting study tasks.">
     <title>Planner | Daniella Eboma</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="images/daniella.jpg">
 </head>
 
 <body>
@@ -38,6 +39,7 @@
                             aria-describedby="taskError">
                         <button type="submit">Add Task</button>
                     </div>
+                    <p id="taskCounter" class="counter" aria-hidden="true"></p>
                     <p id="taskError" role="alert"></p>
                     <div class="task-options">
                         <div>
@@ -79,7 +81,7 @@
                 </div>
             </div>
 
-            <p id="orderHint" hidden>Rearranging works in My order with the All filter.</p>
+            <p id="plannerNotice" role="status"></p>
             <ul id="taskList"></ul>
             <p id="noMatch" class="lead" hidden>No tasks match this filter.</p>
 
@@ -99,7 +101,7 @@
             <li><a href="https://github.com/dlc-ella" target="_blank" rel="noopener"><img
                         src="images/svgs/github-transparent.svg" alt="GitHub"></a></li>
         </ul>
-        <p>&copy; 2026 Daniella Eboma | Built with HTML and CSS &hearts;</p>
+        <p>&copy; 2026 Daniella Eboma | Built with HTML, CSS and JavaScript &hearts;</p>
     </footer>
     <script src="script.js"></script>
 </body>
