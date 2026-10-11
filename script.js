@@ -333,7 +333,7 @@ function initPlanner() {
         commitVisibleOrder(rest);
     }
 
-    function createTaskItem(task, position, total) {
+    function createTaskItem(task, total) {
         if (task.id === editingId) {
             return createEditItem(task);
         }
@@ -390,12 +390,6 @@ function initPlanner() {
         body.append(checkbox, main);
 
         const actions = el("div", "task-actions");
-        if (canMove) {
-            actions.append(
-                actionButton("move-up", createIcon("up"), "Move up: " + task.text, position === 0, "Move up"),
-                actionButton("move-down", createIcon("down"), "Move down: " + task.text, position === total - 1, "Move down")
-            );
-        }
         actions.append(
             actionButton("edit-btn", "Edit", "Edit task: " + task.text),
             actionButton("delete-btn", "Delete", "Delete task: " + task.text)
@@ -581,13 +575,9 @@ function initPlanner() {
             if (editingId === id) {
                 editingId = null;
             }
-        } else if (button.classList.contains("move-up")) {
-            moveTask(id, -1);
-            pendingFocus = { id: id, selectors: [".move-up", ".move-down"] };
-        } else if (button.classList.contains("move-down")) {
-            moveTask(id, 1);
-            pendingFocus = { id: id, selectors: [".move-down", ".move-up"] };
-        } else if (button.classList.contains("more-btn")) {
+        }
+
+        else if (button.classList.contains("more-btn")) {
             if (expandedIds.has(id)) {
                 expandedIds.delete(id);
             } else {
