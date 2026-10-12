@@ -975,3 +975,13 @@ if (contactForm) {
         }
     });
 }
+
+
+// PROJECT VIDEO
+
+const video = document.getElementById("packet-tracer-video");
+video.muted = true;
+video.defaultPlaybackRate = 2;
+video.playbackRate = 2;
+video.addEventListener("loadedmetadata", () => { video.playbackRate = 2; });
+video.addEventListener("play", () => { video.playbackRate = 2; });
