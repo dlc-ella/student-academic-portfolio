@@ -321,7 +321,7 @@ th {
 #projects article {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(200px, 200px) 1fr;
+    grid-template-columns: minmax(240px, 300px) 1fr;
     gap: 2rem;
     align-items: center;
     padding: 1.25rem 0 1.25rem 2rem;
@@ -347,8 +347,10 @@ th {
 #projects figure img {
     display: block;
     width: 100%;
-    aspect-ratio: 1 / 1;
+    height: auto;
+    aspect-ratio: 16 / 10;
     object-fit: cover;
+    object-position: top;
     background-color: var(--petal);
     outline: 2px solid var(--oxblood);
     outline-offset: 8px;
@@ -861,29 +863,6 @@ input[aria-invalid="true"] {
     color: var(--claret);
 }
 
-@media (max-width: 720px) {
-    .task-actions {
-        width: 100%;
-        justify-content: flex-end;
-    }
-}
-
-@media (pointer: coarse) {
-    .task-actions button {
-        min-height: 44px;
-    }
-
-    .task-actions .move-up,
-    .task-actions .move-down {
-        width: 44px;
-    }
-
-    .grip {
-        width: 2.75rem;
-        margin-left: -0.9rem;
-    }
-}
-
 
 /* CONTACT PAGE */
 
@@ -1029,15 +1008,26 @@ textarea[aria-invalid="true"] {
         max-width: 280px;
     }
 
+    .task-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    #projects figure {
+        max-width: 100%;
+    }
+
+
     #projects article {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 1.25rem;
         padding-left: 1.25rem;
     }
 
     #projects figure {
-        max-width: 300px;
+        max-width: 100%;
     }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1054,5 +1044,21 @@ textarea[aria-invalid="true"] {
 
     .keywords li::after {
         display: none;
+    }
+}
+
+@media (pointer: coarse) {
+    .task-actions button {
+        min-height: 44px;
+    }
+
+    .task-actions .move-up,
+    .task-actions .move-down {
+        width: 44px;
+    }
+
+    .grip {
+        width: 2.75rem;
+        margin-left: -0.9rem;
     }
 }
