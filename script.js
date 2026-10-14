@@ -4,6 +4,7 @@ const PRIORITY_WEIGHT = { high: 3, medium: 2, low: 1 };
 const PRIORITY_LABEL = { high: "High", medium: "Medium", low: "Low" };
 const SORT_MODES = ["manual", "deadline", "priority"];
 const DAY_MS = 24 * 60 * 60 * 1000;
+const SVG_NS = "http://www.w3.org/2000/svg";
 
 function el(tag, className, text) {
     const node = document.createElement(tag);
@@ -14,6 +15,39 @@ function el(tag, className, text) {
         node.textContent = text;
     }
     return node;
+}
+
+function setAttrs(node, attrs) {
+    Object.entries(attrs).forEach(([name, value]) => node.setAttribute(name, value));
+    return node;
+}
+
+function svgEl(tag, attrs) {
+    return setAttrs(document.createElementNS(SVG_NS, tag), attrs);
+}
+
+function setInvalid(field, invalid) {
+    if (invalid) {
+        field.setAttribute("aria-invalid", "true");
+    } else {
+        field.removeAttribute("aria-invalid");
+    }
+}
+
+function readStorage(key) {
+    try {
+        return localStorage.getItem(key);
+    } catch (error) {
+        return null;
+    }
+}
+
+function writeStorage(key, value) {
+    try {
+        localStorage.setItem(key, value);
+    } catch (error) {
+        return;
+    }
 }
 
 function makeInput(type, name, value) {
@@ -30,6 +64,13 @@ function makeLabel(text, control) {
     return label;
 }
 
+function makeButton(className, content, type) {
+    const button = el("button", className);
+    button.type = type || "button";
+    button.append(content);
+    return button;
+}
+
 function makePrioritySelect(name, value) {
     const select = el("select");
     select.name = name;
@@ -42,42 +83,34 @@ function makePrioritySelect(name, value) {
     return select;
 }
 
-const SVG_NS = "http://www.w3.org/2000/svg";
-
 function createIcon(name) {
-    const svg = document.createElementNS(SVG_NS, "svg");
-    svg.setAttribute("viewBox", "0 0 24 24");
-    svg.setAttribute("class", "icon icon-" + name);
-    svg.setAttribute("aria-hidden", "true");
-    svg.setAttribute("focusable", "false");
+    const svg = svgEl("svg", {
+        viewBox: "0 0 24 24",
+        class: "icon icon-" + name,
+        "aria-hidden": "true",
+        focusable: "false"
+    });
 
     if (name === "grip") {
         [[9, 6], [15, 6], [9, 12], [15, 12], [9, 18], [15, 18]].forEach(([cx, cy]) => {
-            const dot = document.createElementNS(SVG_NS, "circle");
-            dot.setAttribute("cx", cx);
-            dot.setAttribute("cy", cy);
-            dot.setAttribute("r", "1.7");
-            dot.setAttribute("fill", "currentColor");
-            svg.append(dot);
+            svg.append(svgEl("circle", { cx: cx, cy: cy, r: "1.7", fill: "currentColor" }));
         });
         return svg;
     }
 
-    const path = document.createElementNS(SVG_NS, "path");
-    path.setAttribute("d", name === "up" ? "M6 15l6-6 6 6" : "M6 9l6 6 6-6");
-    path.setAttribute("fill", "none");
-    path.setAttribute("stroke", "currentColor");
-    path.setAttribute("stroke-width", "2.6");
-    path.setAttribute("stroke-linecap", "round");
-    path.setAttribute("stroke-linejoin", "round");
-    svg.append(path);
+    svg.append(svgEl("path", {
+        d: name === "up" ? "M6 15l6-6 6 6" : "M6 9l6 6 6-6",
+        fill: "none",
+        stroke: "currentColor",
+        "stroke-width": "2.6",
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round"
+    }));
     return svg;
 }
 
 function actionButton(className, content, ariaLabel, disabled, tooltip) {
-    const button = el("button", className);
-    button.type = "button";
-    button.append(content);
+    const button = makeButton(className, content);
     button.setAttribute("aria-label", ariaLabel);
     if (tooltip) {
         button.title = tooltip;
@@ -99,7 +132,7 @@ function normalizeTask(raw) {
 
 function loadTasks() {
     try {
-        const saved = JSON.parse(localStorage.getItem(PLANNER_KEY));
+        const saved = JSON.parse(readStorage(PLANNER_KEY));
         if (!Array.isArray(saved)) {
             return [];
         }
@@ -112,28 +145,16 @@ function loadTasks() {
 }
 
 function saveTasks(tasks) {
-    try {
-        localStorage.setItem(PLANNER_KEY, JSON.stringify(tasks));
-    } catch (error) {
-        return;
-    }
+    writeStorage(PLANNER_KEY, JSON.stringify(tasks));
 }
 
 function loadSort() {
-    try {
-        const saved = localStorage.getItem(SORT_KEY);
-        return SORT_MODES.includes(saved) ? saved : "manual";
-    } catch (error) {
-        return "manual";
-    }
+    const saved = readStorage(SORT_KEY);
+    return SORT_MODES.includes(saved) ? saved : "manual";
 }
 
 function saveSort(mode) {
-    try {
-        localStorage.setItem(SORT_KEY, mode);
-    } catch (error) {
-        return;
-    }
+    writeStorage(SORT_KEY, mode);
 }
 
 function parseDate(value) {
@@ -148,6 +169,10 @@ function startOfToday() {
 
 function daysUntil(value) {
     return Math.round((parseDate(value) - startOfToday()) / DAY_MS);
+}
+
+function isOverdue(task) {
+    return !task.done && task.due !== "" && daysUntil(task.due) < 0;
 }
 
 function plural(count, word) {
@@ -217,6 +242,10 @@ function createPriorityMarks(priority) {
     return wrapper;
 }
 
+function taskIdOf(node) {
+    return Number(node.closest(".task").dataset.id);
+}
+
 function initPlanner() {
     const taskForm = document.getElementById("taskForm");
     if (!taskForm) {
@@ -247,7 +276,15 @@ function initPlanner() {
     let drag = null;
     const expandedIds = new Set();
 
-    const persist = () => saveTasks(tasks);
+    function commit(id, selectors) {
+        pendingFocus = id === undefined ? null : { id: id, selectors: selectors };
+        saveTasks(tasks);
+        render();
+    }
+
+    function updateTask(id, changes) {
+        tasks = tasks.map((task) => (task.id === id ? { ...task, ...changes } : task));
+    }
 
     function showNotice(text) {
         plannerNotice.textContent = text;
@@ -333,7 +370,7 @@ function initPlanner() {
         commitVisibleOrder(rest);
     }
 
-    function createTaskItem(task, total) {
+    function createTaskItem(task, position, total) {
         if (task.id === editingId) {
             return createEditItem(task);
         }
@@ -365,11 +402,9 @@ function initPlanner() {
         text.htmlFor = checkbox.id;
         text.id = "task-text-" + task.id;
 
-        const more = el("button", "more-btn", "Show more");
-        more.type = "button";
+        const more = makeButton("more-btn", "Show more");
         more.hidden = true;
-        more.setAttribute("aria-expanded", "false");
-        more.setAttribute("aria-controls", text.id);
+        setAttrs(more, { "aria-expanded": "false", "aria-controls": text.id });
 
         const meta = el("span", "task-meta");
         if (task.course) {
@@ -390,6 +425,7 @@ function initPlanner() {
         body.append(checkbox, main);
 
         const actions = el("div", "task-actions");
+
         actions.append(
             actionButton("edit-btn", "Edit", "Edit task: " + task.text),
             actionButton("delete-btn", "Delete", "Delete task: " + task.text)
@@ -423,13 +459,11 @@ function initPlanner() {
             makeLabel("Priority", priorityField)
         );
 
-        const saveButton = el("button", "save-btn", "Save");
-        saveButton.type = "submit";
-        const cancelButton = el("button", "cancel-btn", "Cancel");
-        cancelButton.type = "button";
-
         const actions = el("div", "edit-actions");
-        actions.append(saveButton, cancelButton);
+        actions.append(
+            makeButton("save-btn", "Save", "submit"),
+            makeButton("cancel-btn", "Cancel")
+        );
 
         form.append(grid, actions);
         item.append(form);
@@ -495,7 +529,7 @@ function initPlanner() {
         });
 
         const completed = tasks.filter((task) => task.done).length;
-        const overdue = tasks.filter((task) => !task.done && task.due !== "" && daysUntil(task.due) < 0).length;
+        const overdue = tasks.filter(isOverdue).length;
         const hasTasks = tasks.length > 0;
 
         let summary = completed + " of " + tasks.length + " completed";
@@ -520,7 +554,7 @@ function initPlanner() {
 
         if (text === "") {
             taskError.textContent = "Type a task first.";
-            taskInput.setAttribute("aria-invalid", "true");
+            setInvalid(taskInput, true);
             taskInput.focus();
             return;
         }
@@ -535,10 +569,9 @@ function initPlanner() {
         });
 
         taskError.textContent = "";
-        taskInput.removeAttribute("aria-invalid");
+        setInvalid(taskInput, false);
         setFilter("all");
-        persist();
-        render();
+        commit();
         taskForm.reset();
         updateCounter();
         taskInput.focus();
@@ -546,7 +579,7 @@ function initPlanner() {
 
     taskInput.addEventListener("input", () => {
         taskError.textContent = "";
-        taskInput.removeAttribute("aria-invalid");
+        setInvalid(taskInput, false);
         updateCounter();
     });
 
@@ -554,11 +587,9 @@ function initPlanner() {
         if (event.target.type !== "checkbox") {
             return;
         }
-        const id = Number(event.target.closest(".task").dataset.id);
-        tasks = tasks.map((task) => (task.id === id ? { ...task, done: !task.done } : task));
-        pendingFocus = { id: id, selectors: ["input[type='checkbox']"] };
-        persist();
-        render();
+        const id = taskIdOf(event.target);
+        updateTask(id, { done: event.target.checked });
+        commit(id, ["input[type='checkbox']"]);
     });
 
     taskList.addEventListener("click", (event) => {
@@ -567,73 +598,61 @@ function initPlanner() {
             return;
         }
 
-        const id = Number(button.closest(".task").dataset.id);
+        const id = taskIdOf(button);
+        const is = (name) => button.classList.contains(name);
 
-        if (button.classList.contains("delete-btn")) {
+        if (is("delete-btn")) {
             tasks = tasks.filter((task) => task.id !== id);
             expandedIds.delete(id);
             if (editingId === id) {
                 editingId = null;
             }
+            commit();
         }
 
-        else if (button.classList.contains("more-btn")) {
-            if (expandedIds.has(id)) {
-                expandedIds.delete(id);
-            } else {
+        else if (is("more-btn")) {
+            if (!expandedIds.delete(id)) {
                 expandedIds.add(id);
             }
-            pendingFocus = { id: id, selectors: [".more-btn"] };
-        } else if (button.classList.contains("edit-btn")) {
+            commit(id, [".more-btn"]);
+        } else if (is("edit-btn")) {
             editingId = id;
-            pendingFocus = { id: id, selectors: [".edit-text"] };
-        } else if (button.classList.contains("cancel-btn")) {
+            commit(id, [".edit-text"]);
+        } else if (is("cancel-btn")) {
             editingId = null;
-            pendingFocus = { id: id, selectors: [".edit-btn"] };
-        } else {
-            return;
+            commit(id, [".edit-btn"]);
         }
-
-        persist();
-        render();
     });
 
     taskList.addEventListener("submit", (event) => {
         event.preventDefault();
         const form = event.target;
-        const id = Number(form.closest(".task").dataset.id);
-        const text = form.elements["text"].value.trim();
+        const id = taskIdOf(form);
+        const textField = form.elements["text"];
+        const text = textField.value.trim();
 
         if (text === "") {
-            form.elements["text"].setAttribute("aria-invalid", "true");
-            form.elements["text"].focus();
+            setInvalid(textField, true);
+            textField.focus();
             return;
         }
 
-        tasks = tasks.map((task) => {
-            if (task.id !== id) {
-                return task;
-            }
-            return {
-                ...task,
-                text: text,
-                course: form.elements["course"].value.trim(),
-                due: form.elements["due"].value,
-                priority: form.elements["priority"].value
-            };
+        updateTask(id, {
+            text: text,
+            course: form.elements["course"].value.trim(),
+            due: form.elements["due"].value,
+            priority: form.elements["priority"].value
         });
 
         editingId = null;
-        pendingFocus = { id: id, selectors: [".edit-btn"] };
-        persist();
-        render();
+        commit(id, [".edit-btn"]);
     });
 
     taskList.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && editingId !== null) {
-            pendingFocus = { id: editingId, selectors: [".edit-btn"] };
+            const id = editingId;
             editingId = null;
-            render();
+            commit(id, [".edit-btn"]);
         }
     });
 
@@ -738,8 +757,7 @@ function initPlanner() {
 
         if (hit) {
             moveTaskTo(id, Number(hit.row.dataset.id), hit.after);
-            persist();
-            render();
+            commit();
         }
     });
 
@@ -861,24 +879,22 @@ const rules = {
 function getErrorElement(field) {
     let error = document.getElementById(field.id + "-error");
     if (!error) {
-        error = document.createElement("p");
+        error = el("p", "field-error");
         error.id = field.id + "-error";
-        error.className = "field-error";
         field.insertAdjacentElement("afterend", error);
         field.setAttribute("aria-describedby", error.id);
     }
     return error;
 }
 
+function showFieldError(field, message) {
+    getErrorElement(field).textContent = message;
+    setInvalid(field, message !== "");
+}
+
 function validateField(field) {
     const message = rules[field.name](field.value.trim());
-    getErrorElement(field).textContent = message;
-
-    if (message === "") {
-        field.removeAttribute("aria-invalid");
-    } else {
-        field.setAttribute("aria-invalid", "true");
-    }
+    showFieldError(field, message);
     return message === "";
 }
 
@@ -899,10 +915,7 @@ async function sendMessage(values) {
             access_key: ACCESS_KEY,
             subject: "Portfolio message from " + values.name,
             from_name: "Portfolio contact form",
-            name: values.name,
-            email: values.email,
-            phone: values.phone,
-            message: values.message
+            ...values
         })
     });
     const result = await response.json();
@@ -944,12 +957,10 @@ if (contactForm) {
             return;
         }
 
-        const values = {
-            name: contactForm.elements["name"].value.trim(),
-            email: contactForm.elements["email"].value.trim(),
-            phone: contactForm.elements["phone"].value.trim(),
-            message: contactForm.elements["message"].value.trim()
-        };
+        const values = {};
+        fields.forEach(function (field) {
+            values[field.name] = field.value.trim();
+        });
 
         submitButton.disabled = true;
         submitButton.textContent = "Sending...";
@@ -960,8 +971,7 @@ if (contactForm) {
             if (sent) {
                 contactForm.reset();
                 fields.forEach(function (field) {
-                    getErrorElement(field).textContent = "";
-                    field.removeAttribute("aria-invalid");
+                    showFieldError(field, "");
                 });
                 setFormStatus("Message sent. Thank you, " + values.name.split(" ")[0] + ".", "ok");
             } else {
@@ -976,12 +986,18 @@ if (contactForm) {
     });
 }
 
-
 // PROJECT VIDEO
 
 const video = document.getElementById("packet-tracer-video");
-video.muted = true;
-video.defaultPlaybackRate = 2;
-video.playbackRate = 2;
-video.addEventListener("loadedmetadata", () => { video.playbackRate = 2; });
-video.addEventListener("play", () => { video.playbackRate = 2; });
+
+if (video) {
+    const PLAYBACK_SPEED = 2;
+    const applySpeed = () => {
+        video.playbackRate = PLAYBACK_SPEED;
+    };
+
+    video.muted = true;
+    video.defaultPlaybackRate = PLAYBACK_SPEED;
+    applySpeed();
+    ["loadedmetadata", "play"].forEach((name) => video.addEventListener(name, applySpeed));
+}
