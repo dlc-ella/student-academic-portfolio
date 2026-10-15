@@ -2,7 +2,7 @@
 
 A responsive, multi-page portfolio and academic planner for **Daniella Eboma**, a first-year B.Sc. Cybersecurity student at Miva Open University. Built with plain HTML, CSS and JavaScript for the COS 106 (Introduction to Web Technologies) term project. No frameworks, no build step, no external libraries.
 
-**Live site:** _add your hosted URL here_
+**Live site:** https://dlc-ella.github.io/student-academic-portfolio/
 **Repository:** https://github.com/dlc-ella/student-academic-portfolio
 
 ## Pages
@@ -46,18 +46,16 @@ A responsive, multi-page portfolio and academic planner for **Daniella Eboma**, 
 ├── projects.html
 ├── planner.html
 ├── contact.html
-├── styles.css          all styles, one stylesheet
-├── script.js           planner and contact form logic
+├── styles.css         
+├── script.js          
 ├── images/
 │   ├── daniella.jpg
 │   ├── portfolio-screenshot.png
 │   ├── packet-tracer-screenshot.png
 │   ├── planner-screenshot.png
-│   └── svgs/           footer icons
-├── videos/
-│   └── packet-tracer-lab.mp4
-└── docs/
-    └── DOCUMENTATION.md
+│   └── svgs/   
+└─── videos/
+     └── packet-tracer-lab.mp4
 ```
 
 ## Set up the contact form
