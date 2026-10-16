@@ -85,13 +85,6 @@ File paths on GitHub Pages are case-sensitive, so `images/` and `Images/` are di
 - Moving a task never depends on dragging: the up and down buttons work with a keyboard and a screen reader
 - Touch targets are at least 44px on touch screens
 
-## Browser support
-
-Built for current versions of Chrome, Edge, Firefox and Safari. Automated checks were run in Chromium at desktop and phone widths. See [`docs/DOCUMENTATION.md`](docs/DOCUMENTATION.md) for what was tested and what still needs a manual check on real devices.
-
-## Documentation
-
-The full documentation covers the design system, how the planner works internally, the data model, requirement mapping and known limitations: [`docs/DOCUMENTATION.md`](docs/DOCUMENTATION.md).
 
 ## Author
 
