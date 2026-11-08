@@ -343,7 +343,7 @@ function initPlanner() {
             currentSort = "manual";
             sortSelect.value = "manual";
             saveSort("manual");
-            showNotice("Sorting switched to My order so your new order stays.");
+            // showNotice("Sorting switched to My order so your new order stays.");
         }
     }
 
@@ -808,14 +808,8 @@ const ACCESS_KEY = "b6ec6790-1f7d-4204-80ab-e3f3fc23c077";
 const contactForm = document.getElementById("contactForm");
 
 const EMAIL_TYPOS = {
-    "gmial.com": "gmail.com",
-    "gmai.com": "gmail.com",
-    "gmail.co": "gmail.com",
-    "gamil.com": "gmail.com",
-    "yaho.com": "yahoo.com",
-    "yahooo.com": "yahoo.com",
-    "hotmial.com": "hotmail.com",
-    "outlok.com": "outlook.com"
+    "gmial.com": "gmail.com", "gmai.com": "gmail.com", "gmail.co": "gmail.com", "gamil.com": "gmail.com",
+    "yaho.com": "yahoo.com", "yahooo.com": "yahoo.com", "hotmial.com": "hotmail.com", "outlok.com": "outlook.com"
 };
 
 const rules = {
@@ -836,13 +830,9 @@ const rules = {
             return "Enter your email address.";
         }
         const parts = value.split("@");
-        const validShape = parts.length === 2 &&
-            /^[A-Za-z0-9._%+-]+$/.test(parts[0]) &&
-            !parts[0].startsWith(".") &&
-            !parts[0].endsWith(".") &&
-            !parts[0].includes("..") &&
-            /^([A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z]{2,}$/.test(parts[1]) &&
-            value.length <= 254;
+        const validShape = parts.length === 2 && /^[A-Za-z0-9._%+-]+$/.test(parts[0]) && !parts[0].startsWith(".") &&
+            !parts[0].endsWith(".") && !parts[0].includes("..") &&
+            /^([A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z]{2,}$/.test(parts[1]) && value.length <= 254;
 
         if (!validShape) {
             return "Enter a valid email, like name@example.com.";
