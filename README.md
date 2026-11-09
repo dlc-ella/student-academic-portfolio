@@ -2,7 +2,7 @@
 
 A responsive, multi-page personal academic portfolio and study management web application designed and developed for **Daniella Eboma**, a B.Sc. Cybersecurity student at **Miva Open University**. 
 
-This project was built from scratch using semantic **HTML5**, modern **CSS3** (CSS Grid, Flexbox, and custom properties), and vanilla **ES6+ JavaScript** for the **COS 106 (Introduction to Web Technologies)** Practical Term Project—with zero external frameworks, libraries, or build steps.
+This project was built from scratch using semantic **HTML5**, modern **CSS3** (CSS Grid, Flexbox, and custom properties), and vanilla **ES6+ JavaScript** for the **CSC 106 (Introduction to Web Technologies)** Practical Term Project—with zero external frameworks, libraries, or build steps.
 
 * **Live Website (GitHub Pages):** [https://dlc-ella.github.io/student-academic-portfolio/](https://dlc-ella.github.io/student-academic-portfolio/)
 * **GitHub Repository:** [https://github.com/dlc-ella/student-academic-portfolio](https://github.com/dlc-ella/student-academic-portfolio)
@@ -31,7 +31,7 @@ The **Student Academic Portfolio and Management Website** serves as both a publi
 
 ### 1. Interactive Academic Task Planner (`planner.html` & `script.js`)
 * **Full CRUD Lifecycle:** Add new academic tasks (up to 120 characters with a live character counter), edit existing tasks inline, mark tasks as completed, or delete them.
-* **Course Tags, Deadlines & Priorities:** Attach a course code (e.g., `COS 106`), a due date, and one of three priority levels (`Low`, `Medium`, `High`) rendered with visual priority marks.
+* **Course Tags, Deadlines & Priorities:** Attach a course code (e.g., `CSC 106`), a due date, and one of three priority levels (`Low`, `Medium`, `High`) rendered with visual priority marks.
 * **Automatic Deadline Intelligence:** Dynamically calculates days remaining and applies status badges such as *Overdue by X days*, *Due today*, *Due tomorrow*, or *In X days*.
 * **Filtering & Multi-Mode Sorting:** Filter the task list by **All**, **Active**, or **Done**, and sort tasks by **My order** (manual), **Deadline**, or **Priority**.
 * **Pointer Drag-and-Drop Reordering:** Reorder tasks smoothly using mouse, touch, or stylus via the grip handle (with automatic viewport edge-scrolling). Automatically switches sorting to *My order* so custom arrangements are preserved.
